@@ -1,8 +1,9 @@
 import os
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.orm import DeclarativeBase
 
-from app.models.models import Base, User, Note, Todo, Reminder
+from app.models.models import User
 
 # 从环境变量获取数据库路径，默认为 data/memenote.sqlite3
 database_path = os.getenv("SQLITE_DB_PATH", "data/memenote.sqlite3")
@@ -26,3 +27,8 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 async def create_db_and_tables():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+
+# 基类
+class Base(DeclarativeBase):
+    pass
